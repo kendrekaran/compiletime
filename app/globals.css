@@ -37,6 +37,19 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  
+  /* Custom Color Palette - Theme Aware */
+  --color-app-background: var(--app-background);
+  --color-app-surface: var(--app-surface);
+  --color-app-orange: #F97316;
+  --color-app-blue: #3B82F6;
+  --color-app-green: #22C55E;
+  --color-app-purple: #8B5CF6;
+  --color-app-yellow: #FACC15;
+  --color-app-divider: var(--app-divider);
+  --color-app-text-primary: var(--app-text-primary);
+  --color-app-text-secondary: var(--app-text-secondary);
+  
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -76,6 +89,16 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  
+  /* Improved Light Mode Custom Colors */
+  --app-background: #F5F7FA;        /* Softer, slightly bluish-white background for reduced glare */
+  --app-surface: #FFFFFF;           /* Pure white for cards/surfaces to maintain clarity */
+  --app-divider: #E2E8F0;           /* Lighter and more subtle divider than original */
+  --app-text-primary: #1A202C;      /* Excellent – keep as is (dark slate) */
+  --app-text-secondary: #718096;    /* Slightly lighter/muted gray-blue for secondary text */
+  
+  /* Custom easing function for view transitions */
+  --expo-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark {
@@ -110,6 +133,51 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  
+  /* Dark Mode Custom Colors */
+  --app-background: #0E0E10;
+  --app-surface: #1C1C1F;
+  --app-divider: #2C2C2E;
+  --app-text-primary: #FFFFFF;
+  --app-text-secondary: #A1A1AA;
+}
+
+/* View Transition Animations */
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: var(--expo-out);
+}
+      
+::view-transition-new(root) {
+  animation-name: reveal-light;
+}
+
+::view-transition-old(root),
+.dark::view-transition-old(root) {
+  animation: none;
+  z-index: -1;
+}
+
+.dark::view-transition-new(root) {
+  animation-name: reveal-dark;
+}
+
+@keyframes reveal-dark {
+  from {
+    clip-path: polygon(50% -71%, -50% 71%, -50% 71%, 50% -71%);
+  }
+  to {
+    clip-path: polygon(50% -71%, -50% 71%, 50% 171%, 171% 50%);
+  }
+}
+
+@keyframes reveal-light {
+  from {
+    clip-path: polygon(171% 50%, 50% 171%, 50% 171%, 171% 50%);
+  }
+  to {
+    clip-path: polygon(171% 50%, 50% 171%, -50% 71%, 50% -71%);
+  }
 }
 
 @layer base {

@@ -1,5 +1,5 @@
 import Image from "next/image"
-import { Loader2 } from "lucide-react"
+import {  Hash, Clock, Code, Activity } from "lucide-react"
 import { 
   User,
   LeaderboardUser,
@@ -16,6 +16,7 @@ interface LeaderboardTableProps {
   totalPages: number
   users: User[]
   loadMoreRef: React.RefObject<HTMLDivElement | null>
+  timeframe?: 'daily' | 'weekly'
 }
 
 export default function LeaderboardTable({ 
@@ -24,88 +25,211 @@ export default function LeaderboardTable({
   currentPage, 
   totalPages, 
   users, 
-  loadMoreRef 
+  loadMoreRef,
+  timeframe = 'daily'
 }: LeaderboardTableProps) {
+  const timeLabel = timeframe === 'weekly' ? 'This Week' : 'Time Today'
+  
   return (
-    <div className="rounded-lg border overflow-x-auto" style={{ backgroundColor: '#161B22', borderColor: '#30363D' }}>
-      <div className="min-w-full">
-        <div className="grid grid-cols-[80px_1fr_120px_2fr_120px] gap-4 p-4 border-b text-sm font-medium" style={{ borderColor: '#30363D', color: '#8B949E' }}>
-          <div>Rank</div>
-          <div>Developer</div>
-          <div>Time Today</div>
-          <div>Languages</div>
-          <div>Status</div>
+    <div className="bg-app-surface rounded-lg md:rounded-2xl border border-app-divider overflow-hidden shadow-sm">
+      {/* Table Header */}
+      <div className="bg-app-background/50 border-b border-app-divider px-3 md:px-6 py-2 md:py-4">
+        <div className="hidden md:grid grid-cols-12 gap-4 items-center text-sm font-semibold text-app-text-secondary">
+          <div className="col-span-1 flex items-center justify-center">
+            <Hash className="w-4 h-4" />
+          </div>
+          <div className="col-span-4 flex items-center space-x-2">
+            <span>Developer</span>
+          </div>
+          <div className="col-span-2 flex items-center justify-center space-x-2">
+            <Clock className="w-4 h-4" />
+            <span className="hidden lg:inline">{timeLabel}</span>
+            <span className="lg:hidden">Time</span>
+          </div>
+          <div className="col-span-3 flex items-center space-x-2">
+            <Code className="w-4 h-4" />
+            <span>Languages</span>
+          </div>
+          <div className="col-span-2 flex items-center justify-center space-x-2">
+            <Activity className="w-4 h-4" />
+            <span>Status</span>
+          </div>
         </div>
+        {/* Mobile Header */}
+        <div className="md:hidden flex items-center justify-between text-xs font-semibold text-app-text-secondary">
+          <span>Developer Leaderboard</span>
+          <span className="text-xs">{timeLabel}</span>
+        </div>
+      </div>
 
-        {leaderboardData.map((coder) => (
+      {/* Table Body */}
+      <div className="divide-y divide-app-divider">
+        {leaderboardData.map((coder, index) => (
           <div
-            key={coder.userId}
-            className="grid grid-cols-[80px_1fr_120px_2fr_120px] gap-4 p-4 border-b last:border-b-0 hover:opacity-80 transition-opacity items-center"
-            style={{ borderColor: '#30363D' }}
+            key={`leaderboard-${coder.userId}-${index}`}
+            className="p-3 md:px-6 md:py-5 hover:bg-app-background/30 transition-all duration-200 group"
           >
-            <div className="font-medium" style={{ color: '#8B949E' }}>#{coder.place}</div>
-            <div className="flex items-center space-x-3 min-w-0">
-              <div className="relative flex-shrink-0">
-                <Image
-                  src={coder.image}
-                  alt={coder.name}
-                  width={32}
-                  height={32}
-                  className="rounded-full"
-                />
-                {coder.isOnline && (
-                  <div className="absolute -bottom-1 -right-1 w-2 h-2 rounded-full border" style={{ backgroundColor: '#238636', borderColor: '#161B22' }}></div>
-                )}
+            {/* Desktop Layout */}
+            <div className="hidden md:grid grid-cols-12 gap-4 items-center">
+              {/* Rank */}
+              <div className="col-span-1 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-lg bg-app-background flex items-center justify-center text-sm font-bold text-app-text-secondary group-hover:bg-app-blue/10 group-hover:text-app-blue transition-all duration-200">
+                  {coder.place}
+                </div>
               </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-white font-medium truncate">{coder.name}</div>
-                {coder.githubUsername && (
-                  <div className="text-xs truncate" style={{ color: '#8B949E' }}>@{coder.githubUsername}</div>
-                )}
+
+              {/* Developer Info */}
+              <div className="col-span-4 flex items-center space-x-3 min-w-0">
+                <div className="relative flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden ring-2 ring-app-divider/50 group-hover:ring-app-blue/30 transition-all duration-200">
+                    <Image
+                      src={coder.image}
+                      alt={coder.name}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  {coder.isOnline && (
+                    <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-app-green rounded-full border-2 border-app-surface animate-pulse"></div>
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-semibold text-app-text-primary truncate text-base group-hover:text-app-blue transition-colors duration-200">
+                    {coder.name}
+                  </h4>
+                  {coder.githubUsername && (
+                    <p className="text-sm text-app-text-secondary truncate">@{coder.githubUsername}</p>
+                  )}
+                </div>
               </div>
-            </div>
-            <div className="font-medium" style={{ color: '#2F81F7' }}>{formatTime(coder.totalTimeToday)}</div>
-            <div className="flex flex-wrap gap-1 py-1">
-              {formatLanguages(coder.languageWiseTime).map(({ language, formattedTime }) => {
-                const IconComponent = getLanguageIcon(language)
-                return (
-                  <span
-                    key={language}
-                    className={`text-xs md:text-sm px-4 py-1 rounded-full ${getLanguageColor(language)} whitespace-nowrap flex items-center gap-2`}
-                    style={{ backgroundColor: '#0D1117' }}
-                    title={`${language}: ${formattedTime}`}
-                  >
-                    {IconComponent && <IconComponent className="w-4 h-4" />}
-                    {language}
+
+              {/* Time */}
+              <div className="col-span-2 flex items-center justify-center">
+                <div className="text-lg font-bold text-app-blue">{formatTime(coder.totalTimeToday)}</div>
+              </div>
+
+              {/* Languages */}
+              <div className="col-span-3 flex flex-wrap gap-1.5">
+                {formatLanguages(coder.languageWiseTime).slice(0, 2).map(({ language, formattedTime }, langIndex) => {
+                  const IconComponent = getLanguageIcon(language)
+                  return (
+                    <span
+                      key={`table-${coder.userId}-${language}-${langIndex}`}
+                      className={`text-xs px-2.5 py-1 rounded-lg ${getLanguageColor(language)} whitespace-nowrap flex items-center gap-1.5 font-medium transition-all duration-200 hover:scale-105`}
+                      title={`${language}: ${formattedTime}`}
+                    >
+                      {IconComponent && <IconComponent className="w-3.5 h-3.5" />}
+                      <span className="hidden lg:inline">{language}</span>
+                    </span>
+                  )
+                })}
+                {formatLanguages(coder.languageWiseTime).length > 2 && (
+                  <span className="text-xs px-2.5 py-1 rounded-lg bg-app-divider/50 text-app-text-secondary font-medium">
+                    +{formatLanguages(coder.languageWiseTime).length - 2}
                   </span>
-                )
-              })}
+                )}
+              </div>
+
+              {/* Status */}
+              <div className="col-span-2 flex items-center justify-center space-x-2">
+                <div className={`w-3 h-3 rounded-full flex-shrink-0 ${coder.isOnline ? 'bg-app-green animate-pulse' : 'bg-app-text-secondary'}`}></div>
+                <span className={`text-sm font-medium hidden lg:inline ${coder.isOnline ? 'text-app-green' : 'text-app-text-secondary'}`}>
+                  {coder.isOnline ? 'Online' : 'Offline'}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: coder.isOnline ? '#238636' : '#8B949E' }}></div>
-              <span className="text-sm" style={{ color: coder.isOnline ? '#238636' : '#8B949E' }}>
-                {coder.isOnline ? 'Online' : 'Offline'}
-              </span>
+
+            {/* Mobile Layout */}
+            <div className="md:hidden space-y-2">
+              {/* Top Row - Rank, Avatar, Name, Time */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2.5">
+                  <div className="w-5 h-5 rounded-md bg-app-background flex items-center justify-center text-xs font-bold text-app-text-secondary">
+                    {coder.place}
+                  </div>
+                  <div className="relative">
+                    <div className="w-8 h-8 rounded-lg overflow-hidden">
+                      <Image
+                        src={coder.image}
+                        alt={coder.name}
+                        width={32}
+                        height={32}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    {coder.isOnline && (
+                      <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-app-green rounded-full border border-app-surface animate-pulse"></div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-semibold text-app-text-primary truncate text-sm">
+                      {coder.name}
+                    </h4>
+                    {coder.githubUsername && (
+                      <p className="text-xs text-app-text-secondary truncate">@{coder.githubUsername}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-base font-bold text-app-blue">{formatTime(coder.totalTimeToday)}</div>
+                  <div className={`flex items-center justify-end space-x-1 mt-0.5 ${coder.isOnline ? 'text-app-green' : 'text-app-text-secondary'}`}>
+                    <div className={`w-1.5 h-1.5 rounded-full ${coder.isOnline ? 'bg-app-green animate-pulse' : 'bg-app-text-secondary'}`}></div>
+                    <span className="text-xs font-medium">{coder.isOnline ? 'Online' : 'Offline'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Row - Languages */}
+              <div className="flex flex-wrap gap-1 pl-8">
+                {formatLanguages(coder.languageWiseTime).slice(0, 3).map(({ language, formattedTime }, langIndex) => {
+                  const IconComponent = getLanguageIcon(language)
+                  return (
+                    <span
+                      key={`mobile-table-${coder.userId}-${language}-${langIndex}`}
+                      className={`text-xs px-2 py-1 rounded-md ${getLanguageColor(language)} whitespace-nowrap flex items-center gap-1 font-medium`}
+                      title={`${language}: ${formattedTime}`}
+                    >
+                      {IconComponent && <IconComponent className="w-2.5 h-2.5" />}
+                      <span>{language}</span>
+                    </span>
+                  )
+                })}
+                {formatLanguages(coder.languageWiseTime).length > 3 && (
+                  <span className="text-xs px-2 py-1 rounded-md bg-app-divider/50 text-app-text-secondary font-medium">
+                    +{formatLanguages(coder.languageWiseTime).length - 3}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         ))}
       </div>
       
-      {/* Loading more indicator and infinite scroll trigger */}
+      {/* Loading/End State */}
       <div 
         ref={loadMoreRef}
-        className="flex items-center justify-center p-8"
+        className="p-4 md:p-8 bg-app-background/20"
       >
         {loadingMore && (
-          <div className="flex items-center space-x-3">
-            <Loader2 className="w-6 h-6 animate-spin" style={{ color: '#2F81F7' }} />
-            <span style={{ color: '#8B949E' }}>Loading more developers...</span>
+          <div className="flex flex-col items-center justify-center space-y-2 md:space-y-3">
+            <div className="relative">
+              <div className="w-6 h-6 md:w-8 md:h-8 border-2 border-app-divider border-t-app-blue rounded-full animate-spin"></div>
+            </div>
+            <div className="text-center">
+              <p className="font-medium text-app-text-primary text-sm md:text-base">Loading more developers...</p>
+              <p className="text-xs md:text-sm text-app-text-secondary">Hang tight while we fetch more stats</p>
+            </div>
           </div>
         )}
         {!loadingMore && currentPage >= totalPages && users && users.length > 0 && (
           <div className="text-center">
-            <p style={{ color: '#8B949E' }}>🎉 You&apos;ve reached the end of the leaderboard!</p>
-            <p className="text-sm mt-1" style={{ color: '#8B949E' }}>
+            <div className="w-10 h-10 md:w-16 md:h-16 bg-app-green/10 rounded-full flex items-center justify-center mx-auto mb-3 md:mb-4">
+              <Hash className="w-5 h-5 md:w-8 md:h-8 text-app-green" />
+            </div>
+            <h3 className="text-base md:text-lg font-bold text-app-text-primary mb-1 md:mb-2">🎉 That&apos;s everyone!</h3>
+            <p className="text-app-text-secondary mb-1 text-sm">You&apos;ve reached the end of the leaderboard</p>
+            <p className="text-xs md:text-sm text-app-text-secondary">
               {users.length} total developers loaded
             </p>
           </div>
