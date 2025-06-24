@@ -165,20 +165,18 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-app-text-primary bg-app-background">
       {/* Top Banner */}
-      <div className="bg-app-blue text-white py-1 sm:py-1.5  px-3 sm:px-4 md:px-6">
+      <div className="bg-app-blue text-white py-0 sm:py-1.5  px-3 sm:px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex  xs:flex-row items-center justify-center text-center xs:text-left gap-0.5 xs:gap-1 sm:gap-2">
             <span className="text-xs sm:text-sm md:text-base font-medium leading-tight">
-              <span className="">FuckYou ForkYou Follow</span>
+              <span className="">FuckYou ForkYou Follow -</span>
             </span>
-            <span className="hidden xs:inline text-xs sm:text-sm md:text-base">-</span>
             <Link
               href="https://x.com/karaan_dev" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-xs sm:text-sm md:text-base font-bold hover:underline transition-all duration-200 hover:text-blue-100 active:text-blue-200 min-h-[40px] xs:min-h-[36px] sm:min-h-auto flex items-center justify-center px-2 py-0.5 xs:px-1 xs:py-0 sm:p-0 rounded xs:rounded-none"
-            >
-              @karaan_dev
+              className="text-xs sm:text-sm md:text-base font-bold hover:underline transition-all duration-200 hover:text-blue-100 active:text-blue-200 min-h-[40px] xs:min-h-[36px] sm:min-h-auto flex items-center justify-center  py-0.5 xs:px-1 xs:py-0 sm:p-0 rounded xs:rounded-none"
+            >@karaan_dev
             </Link>
           </div>
         </div>

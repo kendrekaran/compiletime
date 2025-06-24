@@ -114,9 +114,9 @@ export default function LeaderboardHero({ topCoder }: LeaderboardHeroProps) {
             </div>
             
             {/* Social Links and Languages - Shared for both layouts */}
-            <div className="w-full flex lg:px-24 ">
+            <div className="w-full flex flex-col lg:flex-row lg:px-24 ">
               {/* Social Links */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 lg:gap-4 mb-4">
+              <div className="flex flex-wrap items-center justify-start  gap-2 lg:gap-4 ">
                 <div>
                   
                 </div>
@@ -125,7 +125,7 @@ export default function LeaderboardHero({ topCoder }: LeaderboardHeroProps) {
                     href={`https://github.com/${topCoder.githubUsername}`} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-2 px-3 py-2 lg:px-4 lg:py-2 bg-app-background/50 rounded-lg hover:bg-app-background transition-all duration-200 hover:scale-105"
+                    className="flex items-center space-x-2  px-3 py-2 lg:px-4 lg:py-2 bg-app-background/50 rounded-lg hover:bg-app-background transition-all duration-200 hover:scale-105"
                   >
                     <Github className="w-4 h-4 lg:w-5 lg:h-5 text-app-text-secondary" />
                     <span className="text-sm text-app-text-secondary font-medium">@{topCoder.githubUsername}</span>
@@ -147,24 +147,49 @@ export default function LeaderboardHero({ topCoder }: LeaderboardHeroProps) {
               {/* Languages */}
               <div>
                 <div className="flex mt-1 md:mt-0 flex-wrap gap-2 justify-center lg:justify-start">
-                  {formatLanguages(topCoder.languageWiseTime).slice(0, 6).map(({ language, formattedTime }, langIndex) => {
-                    const IconComponent = getLanguageIcon(language)
-                    return (
-                      <span
-                        key={`hero-${topCoder.userId}-${language}-${langIndex}`}
-                        className={`text-xs lg:text-sm px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl ${getLanguageColor(language)} whitespace-nowrap font-medium flex items-center gap-1.5 lg:gap-2 transition-all duration-200 hover:scale-105 shadow-sm`}
-                        title={`${language}: ${formattedTime}`}
-                      >
-                        {IconComponent && <IconComponent className="w-3 h-3 lg:w-4 lg:h-4" />}
-                        {language}
+                  {/* Mobile: Show 1 language */}
+                  <div className="flex lg:hidden flex-wrap gap-1 md:gap-2 justify-center">
+                    {formatLanguages(topCoder.languageWiseTime).slice(0, 2).map(({ language, formattedTime }, langIndex) => {
+                      const IconComponent = getLanguageIcon(language)
+                      return (
+                        <span
+                          key={`hero-mobile-${topCoder.userId}-${language}-${langIndex}`}
+                          className={`text-xs px-1 md:px-3 py-1.5 rounded-lg ${getLanguageColor(language)} whitespace-nowrap font-medium flex items-center gap-1.5 transition-all duration-200 hover:scale-105 shadow-sm`}
+                          title={`${language}: ${formattedTime}`}
+                        >
+                          {IconComponent && <IconComponent className="w-3 h-3" />}
+                          {language}
+                        </span>
+                      )
+                    })}
+                    {formatLanguages(topCoder.languageWiseTime).length > 1 && (
+                      <span className="text-xs px-3 py-1.5 rounded-lg bg-app-background/50 text-app-text-secondary font-medium">
+                        +{formatLanguages(topCoder.languageWiseTime).length - 1} more
                       </span>
-                    )
-                  })}
-                  {formatLanguages(topCoder.languageWiseTime).length > 6 && (
-                    <span className="text-xs lg:text-sm px-3 py-1.5 lg:px-4 lg:py-2 rounded-lg lg:rounded-xl bg-app-background/50 text-app-text-secondary font-medium">
-                      +{formatLanguages(topCoder.languageWiseTime).length - 6} more
-                    </span>
-                  )}
+                    )}
+                  </div>
+                  
+                  {/* Desktop: Show 3 languages */}
+                  <div className="hidden lg:flex flex-wrap gap-2 justify-start">
+                    {formatLanguages(topCoder.languageWiseTime).slice(0, 3).map(({ language, formattedTime }, langIndex) => {
+                      const IconComponent = getLanguageIcon(language)
+                      return (
+                        <span
+                          key={`hero-desktop-${topCoder.userId}-${language}-${langIndex}`}
+                          className={`text-sm px-4 py-2 rounded-xl ${getLanguageColor(language)} whitespace-nowrap font-medium flex items-center gap-2 transition-all duration-200 hover:scale-105 shadow-sm`}
+                          title={`${language}: ${formattedTime}`}
+                        >
+                          {IconComponent && <IconComponent className="w-4 h-4" />}
+                          {language}
+                        </span>
+                      )
+                    })}
+                    {formatLanguages(topCoder.languageWiseTime).length > 3 && (
+                      <span className="text-sm px-4 py-2 rounded-xl bg-app-background/50 text-app-text-secondary font-medium">
+                        +{formatLanguages(topCoder.languageWiseTime).length - 3} more
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
