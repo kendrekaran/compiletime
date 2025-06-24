@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     siteName: "CompileTime",
     images: [
       {
-        url: "/opengraph.svg",
+        url: "https://compiletime.karank.tech/opengraph.png",
         width: 1327,
         height: 571,
         alt: "CompileTime - Developer Leaderboard",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CompileTime - Developer Leaderboard",
     description: "Track coding activity and compete with developers worldwide",
-    images: ["/opengraph.svg"],
+    images: ["https://compiletime.karank.tech/opengraph.png"],
   },
 };
 
