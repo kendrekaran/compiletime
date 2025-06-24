@@ -16,6 +16,28 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "CompileTime - Developer Leaderboard",
   description: "Track coding activity and compete with developers worldwide",
+  openGraph: {
+    title: "CompileTime - Developer Leaderboard",
+    description: "Track coding activity and compete with developers worldwide",
+    url: "https://compiletime.karank.tech",
+    siteName: "CompileTime",
+    images: [
+      {
+        url: "/opengraph.svg",
+        width: 1200,
+        height: 630,
+        alt: "CompileTime - Developer Leaderboard",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "CompileTime - Developer Leaderboard",
+    description: "Track coding activity and compete with developers worldwide",
+    images: ["/opengraph"],
+  },
 };
 
 export default function RootLayout({
