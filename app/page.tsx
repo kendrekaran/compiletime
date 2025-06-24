@@ -14,6 +14,7 @@ import {
   fetchLeaderboard 
 } from "@/lib/leaderboard-utils"
 import Link from "next/link"
+import { Analytics } from "@vercel/analytics/next"
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState("Today")
@@ -165,6 +166,7 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen text-app-text-primary bg-app-background">
       {/* Top Banner */}
+      <Analytics />
       <div className="bg-app-blue text-white py-0 sm:py-1.5  px-3 sm:px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex  xs:flex-row items-center justify-center text-center xs:text-left gap-0.5 xs:gap-1 sm:gap-2">
