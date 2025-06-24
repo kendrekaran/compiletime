@@ -1,9 +1,8 @@
 import { ImageResponse } from 'next/og'
-import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     return new ImageResponse(
       (
@@ -212,8 +211,8 @@ export async function GET(request: NextRequest) {
         height: 630,
       }
     )
-  } catch (e: any) {
-    console.log(`${e.message}`)
+  } catch (e: unknown) {
+    console.log(`${e instanceof Error ? e.message : 'Unknown error'}`)
     return new Response(`Failed to generate the image`, {
       status: 500,
     })

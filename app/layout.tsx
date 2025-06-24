@@ -24,8 +24,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/opengraph.svg",
-        width: 1200,
-        height: 630,
+        width: 1327,
+        height: 571,
         alt: "CompileTime - Developer Leaderboard",
       },
     ],
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "CompileTime - Developer Leaderboard",
     description: "Track coding activity and compete with developers worldwide",
-    images: ["/opengraph"],
+    images: ["/opengraph.svg"],
   },
 };
 
